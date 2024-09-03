@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management</title>
+</head>
+<body>
+    <h1>Inventory Management</h1>
+    <table id="inventoryTable">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    
+    <script>
+        const API_KEY = '271629174029-55qhvatdvgb42q1tsqk3oqlr3u2561if.apps.googleusercontent.com';
+        const SPREADSHEET_ID = '1yxtXGezXwuDAEFwttGgqP4Jc4uGV72VTSPFfjjcgkYk';
+        const RANGE = 'Sheet1!A:C';
+
+        async function fetchData() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/1yxtXGezXwuDAEFwttGgqP4Jc4uGV72VTSPFfjjcgkYk/values/Sheet1!A:C?key=271629174029-55qhvatdvgb42q1tsqk3oqlr3u2561if.apps.googleusercontent.com`;
+            const response = await fetch(url);
+            const data = await response.json();
+            displayData(data.values);
+        }
+
+        function displayData(rows) {
+            const tableBody = document.querySelector('#inventoryTable tbody');
+            tableBody.innerHTML = ''; // Clear existing data
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip header row
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
